@@ -1,4 +1,4 @@
-# Java中的容器(一) Java中的Map #
+# Java中的容器(一) Java中的Collections #
 
 Java中的容器主要分为Collection和Map两种。
 
