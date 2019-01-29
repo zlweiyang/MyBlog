@@ -1,8 +1,16 @@
 # Java中的线程池 #
 
+线程池的好处：
+
+- 重用存在的线程，减少对象创建、消亡的开销，性能佳。
+- 可以有效控制最大并发线程数，提高系统资源利用率，同时可以避免过多的资源竞争，避免阻塞。
+- 提供定时执行、定期执行，单线程、并发数控制等功能。
+
 ## 一、ThreadPoolExecutor
 
 线程有五种状态：新建，就绪，运行，阻塞，死亡。线程池也同样有这五种状态：Running，SHUTDOWN,STOP,TIDYING，TERMINATED。
+
+<div align="center"> <img src="ThreadPoolExecutor.png" width="450"/> </div><br>
 
 	 private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
 	    private static final int COUNT_BITS = Integer.SIZE - 3;
@@ -80,7 +88,7 @@
 keepAliveTime的单位。TimeUnit
 
 **workQueue**
-用来保存等待执行的任务的阻塞队列，等待的任务必须实现Runnable接口。我们可以选择如下几种：
+用来保存等待执行的任务的**阻塞队列**，存储等待执行的任务，等待的任务必须实现Runnable接口。我们可以选择如下几种：
 
 - ArrayBlockingQueue：基于数组结构的有界阻塞队列，FIFO。
 - LinkedBlockingQueue：基于链表结构的有界阻塞队列，FIFO。
@@ -138,8 +146,22 @@ RejectedExecutionHandler，线程池的拒绝策略。所谓拒绝策略，是�
 
 当然我们也可以实现自己的拒绝策略，例如记录日志等等，实现RejectedExecutionHandler接口即可。
 
+### ThreadPoolExecutor的方法
+
+- execute():提交任务，交给线程池执行。
+- submit():提交任务，能够返回执行结果 execute+Future。
+- shutdown():关闭线程池，等待任务都执行完。
+- shutdownNow():关闭线程池，不等待任务执行完。
+- getTaskCount():线程池已执行和未执行的任务总数。
+- getCompletedTaskCount():线程池当前的线程数量。
+- getPoolSize():线程池当前的线程数量。
+- getActiveCount():当前线程池中正在执行任务的线程的数量。
+
 ## 二、ScheduledThreadPoolExecutor
+Timer与TimerTask虽然可以实现线程的周期和延迟调度，但是Timer与TimerTask存在一些缺陷，所以对于这种定期、周期执行任务的调度策略，我们一般都是推荐ScheduledThreadPoolExecutor来实现。
 
+**那么ScheduledThreadPoolExecutor是如何来实现线程的周期、延迟调度的？**
 
-## 三、FutureTask
+ScheduledThreadPoolExecutor，继承ThreadPoolExecutor且实现了ScheduledExecutorService接口，它就相当于提供了“延迟”和“周期执行”功能的ThreadPoolExecutor。在JDK API中是这样定义它的：ThreadPoolExecutor，它可另行安**排在给定的延迟后运行命令**，或者**定期执行命令**。需要多个辅助线程时，或者要求 ThreadPoolExecutor 具有额外的灵活性或功能时，此类要优于 Timer。 一旦启用已延迟的任务就执行它，但是有关何时启用，启用后何时执行则没有任何实时保证。按照提交的先进先出 (FIFO) 顺序来启用那些被安排在同一执行时间的任务。
+
 

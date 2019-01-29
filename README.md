@@ -22,3 +22,9 @@ My Blog是由Docker+SpringBoot+Mybatis+thymeleaf等技术实现的Java博客系�
     kill -9 pid
     ## 再次重启
     Java -jar  xxxx.jar
+
+利用nginx作为反向代理,nginx.conf配置如下：
+
+<div align="center"> <img src="nginx-conf.png" width="600"/> </div><br>
+
+nginx重启命令：./nginx -s reload
